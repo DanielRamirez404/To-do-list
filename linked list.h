@@ -7,8 +7,11 @@ public:
   T value{};
   node* previousNode{};
   node* nextNode{};
-  node(T initializationValue) { value = initializationValue; };
+  node(T initializationValue);
 };
+
+template <typename T> node<T>::node(T initializationValue) { value = initializationValue; }
+
 
 template <typename T> class linkedList {
 private:
