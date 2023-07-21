@@ -3,6 +3,7 @@
 #include <iostream>
 
 template <typename T> T getUserInput() {
+  std::cout << "----------------------------------------------\n";
   std::cout << "INPUT: ";
   T userInput{};
   std::cin >> userInput;

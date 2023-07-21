@@ -1,6 +1,7 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 #include <cstddef>  //for size_t
+#include <cassert>  //for assert()
 
 template <typename T> class node {
 public:
@@ -25,7 +26,9 @@ public:
   void preppend(T value);
   node<T>* iterate();
   T getIteratorValue() { return iterator->value; };
-  void resetIterator() { tail = NULL; };
+  T& operator[](size_t index);
+  void resetIterator() { iterator = NULL; };
+  size_t getSize() { return size; };
 };
 
 template <typename T> void linkedList<T>::addFirstValue(T value) {
@@ -58,6 +61,22 @@ template <typename T> void linkedList<T>::preppend(T value) {
 template <typename T> node<T>* linkedList<T>::iterate() {
   iterator = (iterator == NULL) ? head : iterator->nextNode;
   return iterator;
+}
+
+template <typename T> T& linkedList<T>::operator[](size_t index) {
+  assert(index < size);
+  size_t i{0};
+  node<T>* requestedNode{};
+  while (iterate() != NULL) {
+    if (i == index) {
+      requestedNode = iterator;
+      break;
+    } else {
+      i++;
+    }
+  };
+  resetIterator();
+  return requestedNode->value;
 }
 
 #endif

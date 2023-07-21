@@ -47,10 +47,7 @@ void getAndDoUserOption(linkedList<const char*>& todoList, bool& keepRunning) {
 }
 
 void printTodoList(linkedList<const char*>& todoList) {
-  int taskCounter{1};
-  while (todoList.iterate() !=  NULL) {
-    std::cout << taskCounter << "- " << todoList.getIteratorValue() << '\n';
-    taskCounter++;
+  for (size_t i = 0; i < todoList.getSize(); i++) {
+    std::cout << i + 1 << "- " << todoList[i] << '\n';  //this is actually slower than just iterating and printing, but I wanted to try this for readability, just as if it were an array
   }
-  todoList.resetIterator();
 }
