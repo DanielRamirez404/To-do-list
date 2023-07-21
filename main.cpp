@@ -14,6 +14,8 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.preppend("Finish to-do list");
   todoList.append("Make another website");
   todoList.append("Work on secret project");
+  todoList.addValueByIndex(0, "Rework LinkedLists");
+  todoList.addValueByIndex(1, "Change To-do list examples");
 }
 
 int main() {
@@ -24,9 +26,6 @@ int main() {
     printMenu();
     getAndDoUserOption(todoList, keepRunning);
     pressAnyToContinue();
-  }
-  while (todoList.iterate() !=  NULL) {
-    std::cout << "* " << todoList.getIteratorValue() << '\n';
   }
   return 0;
 }
@@ -47,7 +46,8 @@ void getAndDoUserOption(linkedList<const char*>& todoList, bool& keepRunning) {
 }
 
 void printTodoList(linkedList<const char*>& todoList) {
-  for (size_t i = 0; i < todoList.getSize(); i++) {
-    std::cout << i + 1 << "- " << todoList[i] << '\n';  //this is actually slower than just iterating and printing, but I wanted to try this for readability, just as if it were an array
+  int i{1};
+  while (todoList.iterate() !=  NULL) {
+    std::cout << i << ") " << todoList.getIteratorValue() << '\n';
   }
 }
