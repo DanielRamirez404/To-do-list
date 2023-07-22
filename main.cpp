@@ -16,6 +16,7 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.append("Work on secret project");
   todoList.addValueByIndex(0, "Rework LinkedLists");
   todoList.addValueByIndex(1, "Change To-do list examples");
+  todoList.changeValueIndex(5, 1);
 }
 
 int main() {
@@ -49,5 +50,6 @@ void printTodoList(linkedList<const char*>& todoList) {
   int i{1};
   while (todoList.iterate() !=  NULL) {
     std::cout << i << ") " << todoList.getIteratorValue() << '\n';
+    ++i;
   }
 }
