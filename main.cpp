@@ -14,9 +14,9 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.preppend("Finish to-do list");
   todoList.append("Make another website");
   todoList.append("Work on secret project");
-  todoList.addValueByIndex(0, "Rework LinkedLists");
-  todoList.addValueByIndex(1, "Change To-do list examples");
-  todoList.changeValueIndex(5, 1);
+  todoList.addValueByIndex(0, "Rework linkedLists");
+  todoList.addValueByIndex(1, "Change to-do list examples");
+  todoList.changeNodeIndex(5, 1);
 }
 
 int main() {
@@ -47,9 +47,7 @@ void getAndDoUserOption(linkedList<const char*>& todoList, bool& keepRunning) {
 }
 
 void printTodoList(linkedList<const char*>& todoList) {
-  int i{1};
-  while (todoList.iterate() !=  NULL) {
+  for (size_t i{1}; todoList.iterate() !=  NULL; ++i) {
     std::cout << i << ") " << todoList.getIteratorValue() << '\n';
-    ++i;
   }
 }

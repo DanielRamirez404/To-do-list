@@ -19,13 +19,20 @@ private:
   node<T>* iterator{NULL};
   void addFirstValue(T value);
   void addInBetweenValue(size_t index, T value);
+  void placeNodeInBetween(node<T>* newNode, node<T>* previousNode);
+  void displaceNodeInBetween(node<T>* nodeToDisplace);
 public:
   T& operator[](size_t index);
   void append(T value);
   void preppend(T value);
   void addValueByIndex(size_t index, T value);
-  void changeValueIndex(size_t oldIndex, size_t newIndex);
-  void clear();
+  void moveNodeToHead(size_t index);      //Not implemented yet
+  void moveNodeToTail(size_t index);      //Not implemented yet
+  void changeNodeIndex(size_t oldIndex, size_t newIndex);
+  void deleteHead();                      //Not implemented yet
+  void deleteTail();                      //Not implemented yet
+  void deleteNodeByIndex(size_t index);   //Not implemented yet
+  void clearList();                       //Not implemented yet
   node<T>* iterate();
   T getIteratorValue() { return iterator->value; };
   void resetIterator() { iterator = NULL; };
@@ -44,9 +51,10 @@ template <typename T> void linkedList<T>::append(T value) {
   if (isEmpty()) {
     addFirstValue(value);
   } else {
-    tail->nextNode = new node<T>(value);
-    tail->nextNode->previousNode = tail;
-    tail = tail->nextNode;
+    node<T>* newNode{new node<T>(value)};
+    tail->nextNode = newNode;
+    newNode->previousNode = tail;
+    tail = newNode;
   }
   ++size;
 }
@@ -55,15 +63,16 @@ template <typename T> void linkedList<T>::preppend(T value) {
   if (isEmpty()) {
     addFirstValue(value);
   } else {
-    head->previousNode = new node<T>(value);
-    head->previousNode->nextNode = head;
-    head = head->previousNode;
+    node<T>* newNode{new node<T>(value)};
+    head->previousNode = newNode;
+    newNode->nextNode = head;
+    head = newNode;
   }
   ++size;
 }
 
-template <typename T> void linkedList<T>::addValueByIndex(size_t index, T value) {  //will be added as if it were an array index
-  assert(index <= size);
+template <typename T> void linkedList<T>::addValueByIndex(size_t index, T value) {
+  assert((index <= size) && "Index value isn\'t valid");
   if (index == 0) {
     preppend(value);
   } else if (index == size) {
@@ -73,50 +82,47 @@ template <typename T> void linkedList<T>::addValueByIndex(size_t index, T value)
   }
 }
 
-template <typename T> void linkedList<T>::changeValueIndex(size_t oldIndex, size_t newIndex) {
-  assert((oldIndex < size) && (newIndex < size) && (oldIndex != newIndex));
-  size_t i{0};
-  node<T>* selectedNode{NULL};
-  while (iterate() != NULL) {
-    if (i == oldIndex) {
-      selectedNode = iterator;
-      selectedNode->previousNode->nextNode = selectedNode->nextNode;
-      selectedNode->nextNode->previousNode = selectedNode->previousNode;
+template <typename T> void linkedList<T>::addInBetweenValue(size_t index, T value) {
+  for (size_t i{0}; iterate() != NULL; ++i) {
+    if (i == index - 1) {
+      placeNodeInBetween(new node<T>(value), iterator);
       break;
-    } else {
-      ++i;
     }
   }
   resetIterator();
-  i=0;
-  while (iterate() != NULL) {
-    if (i == newIndex - 1) {
-      selectedNode->previousNode = iterator;
-      selectedNode->nextNode = iterator->nextNode;
-      selectedNode->previousNode->nextNode = selectedNode;
-      selectedNode->nextNode->previousNode = selectedNode;
-      break;
-    } else {
-      ++i;
-    }
-  }
-  resetIterator();
+  ++size;
 }
 
-template <typename T> void linkedList<T>::addInBetweenValue(size_t index, T value) {
-  size_t i{0};
-  node<T>* newNode{new node<T>(value)};
-  while (iterate() != NULL) {
-    if (i == index - 1) {
-      newNode->previousNode = iterator;
-      newNode->nextNode = iterator->nextNode;
-      newNode->previousNode->nextNode = newNode;
-      newNode->nextNode->previousNode = newNode;
-      ++size;
+template <typename T> void linkedList<T>::placeNodeInBetween(node<T>* newNode, node<T>* priorNode) {
+  newNode->previousNode = priorNode;
+  newNode->nextNode = priorNode->nextNode;
+  priorNode->nextNode->previousNode = newNode;
+  priorNode->nextNode = newNode;
+}
+
+template <typename T> void linkedList<T>::displaceNodeInBetween(node<T>* nodeToDisplace) {
+  nodeToDisplace->previousNode->nextNode = nodeToDisplace->nextNode;
+  nodeToDisplace->nextNode->previousNode = nodeToDisplace->previousNode;
+}
+
+template <typename T> void linkedList<T>::changeNodeIndex(size_t oldIndex, size_t newIndex) {
+  assert((oldIndex < size) && "Old index value is greater than the list\'s size");
+  assert((newIndex < size) && "New index value is greater than the list\'s size");
+  assert((oldIndex != newIndex) && "Both index values shouldn\'t be equal");
+  node<T>* selectedNode{};
+  for (size_t i{0}; iterate() != NULL; ++i) {
+    if (i == oldIndex) {
+      selectedNode = iterator;
+      displaceNodeInBetween(selectedNode);
       break;
-    } else {
-      ++i;
-    }  
+    }
+  }
+  resetIterator();
+  for (size_t i{0}; iterate() != NULL; ++i) {
+    if (i == newIndex - 1) {
+      placeNodeInBetween(selectedNode, iterator);
+      break;
+    }
   }
   resetIterator();
 }
@@ -127,17 +133,15 @@ template <typename T> node<T>* linkedList<T>::iterate() {
 }
 
 template <typename T> T& linkedList<T>::operator[](size_t index) {
-  assert(index < size);
+  assert((index < size) && "Index value isn\'t valid");
   size_t i{0};
   node<T>* requestedNode{};
-  while (iterate() != NULL) {
+  for (size_t i{0}; iterate() != NULL; ++i) {
     if (i == index) {
       requestedNode = iterator;
       break;
-    } else {
-      ++i;
     }
-  };
+  }
   resetIterator();
   return requestedNode->value;
 }
