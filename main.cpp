@@ -3,8 +3,6 @@
 #include "userinput.h"
 #include "menu.h"
 #include <iostream>
-#include <string>
-#include <string_view>
 
 void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.append("Watch Oshi no Ko");
