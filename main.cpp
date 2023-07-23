@@ -12,9 +12,9 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.preppend("Finish to-do list");
   todoList.append("Make another website");
   todoList.append("Work on secret project");
-  todoList.addValueByIndex(0, "Rework linkedLists");
-  todoList.addValueByIndex(1, "Change to-do list examples");
-  todoList.changeNodeIndex(5, 1);
+  todoList.addByIndex(0, "Rework linkedLists");
+  todoList.addByIndex(1, "Change to-do list examples");
+  todoList.moveNode(5, 0);
 }
 
 int main() {
