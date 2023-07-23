@@ -15,6 +15,9 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.addByIndex(0, "Rework linkedLists");
   todoList.addByIndex(1, "Change to-do list examples");
   todoList.moveNode(5, 0);
+  todoList.deleteByIndex(7);
+  todoList.deleteByIndex(5);
+  todoList.addByIndex(5, "Pratiquer l\'orthographie française");
 }
 
 int main() {
