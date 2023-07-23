@@ -33,7 +33,14 @@ private:
   bool isAddedValueInBetween(size_t index) { return ((index != 0) && (index != size)); };
   bool isExistingValueInBetween(size_t index) { return ((index != 0) && (index != size - 1)); };
 public:
-  node<T>* operator[](size_t index);
+  node<T>* iterate();
+  node<T>* getNodeFromIndex(size_t index);
+  T operator[](size_t index);
+  T getIteratorValue() { return iterator->value; };
+  T getHeadValue() { return head->value; };
+  T getTailValue() { return tail->value; };
+  size_t getSize() { return size; };
+  void overwriteValue(size_t index, T value);
   void preppend(T value);
   void append(T value);
   void addByIndex(size_t index, T value);
@@ -44,17 +51,17 @@ public:
   void deleteTail();
   void deleteByIndex(size_t index);
   void clear(); 
-  node<T>* iterate();
-  T getIteratorValue() { return iterator->value; };
   void resetIterator() { iterator = NULL; };
-  T getHeadValue() { return head->value; };
-  T getTailValue() { return tail->value; };
-  size_t getSize() { return size; };
   bool isEmpty() { return (size == 0); };
   ~linkedList() { clear(); };
 };
 
-template <typename T> node<T>* linkedList<T>::operator[](size_t index) {
+template <typename T> node<T>* linkedList<T>::iterate() {
+  iterator = (iterator == NULL) ? head : iterator->nextNode;
+  return iterator;
+}
+
+template <typename T> node<T>* linkedList<T>::getNodeFromIndex(size_t index) {
   assert((index < size) && "Index value isn\'t valid");
   node<T>* requestedNode{};
   for (size_t i{0}; iterate() != NULL; ++i) {
@@ -65,6 +72,16 @@ template <typename T> node<T>* linkedList<T>::operator[](size_t index) {
   }
   resetIterator();
   return requestedNode;
+}
+
+template <typename T> T linkedList<T>::operator[](size_t index) {
+  node<T>* selectedNode{ getNodeFromIndex(index) };
+  return selectedNode->value;
+}
+
+template <typename T> void linkedList<T>::overwriteValue(size_t index, T value) {
+  node<T>* selectedNode{ getNodeFromIndex(index) };
+  selectedNode->value = value;
 }
 
 template <typename T> void linkedList<T>::addFirstValue(T value) {
@@ -174,7 +191,7 @@ template <typename T> void linkedList<T>::moveNode(size_t oldIndex, size_t newIn
 
 template <typename T> void linkedList<T>::moveNodeToHead(size_t index) {
   assert((index < size) && "Index value is greater than or equals the list\'s size");
-  node<T>* selectedNode{ this->operator[](index) };
+  node<T>* selectedNode{  getNodeFromIndex(index) };
   displaceNode(selectedNode, index);
   placeNodeOnHead(selectedNode);
   resetIterator();
@@ -182,7 +199,7 @@ template <typename T> void linkedList<T>::moveNodeToHead(size_t index) {
 
 template <typename T> void linkedList<T>::moveNodeToTail(size_t index) {
   assert((index < size) && "Index value is greater than or equals the list\'s size");
-  node<T>* selectedNode{ this->operator[](index) };
+  node<T>* selectedNode{ getNodeFromIndex(index) };
   displaceNode(selectedNode, index);
   placeNodeOnTail(selectedNode);
   resetIterator();    //This isn't really needed, but it's added to match the other move functions
@@ -194,7 +211,7 @@ template <typename T> void linkedList<T>::moveNodeInBewteen(size_t oldIndex, siz
   assert((oldIndex < size) && "Old index value is greater than or equals the list\'s size");
   assert((newIndex < size) && "New index value is greater than or equals the list\'s size");
   assert((oldIndex != newIndex) && "Both index values shouldn\'t be equal");
-  node<T>* selectedNode{ this->operator[](oldIndex) };
+  node<T>* selectedNode{ getNodeFromIndex(oldIndex) };
   displaceNode(selectedNode, oldIndex);
   for (size_t i{0}; iterate() != NULL; ++i) {
     if (i == newIndex - 1) {
@@ -228,7 +245,7 @@ template <typename T> void linkedList<T>::deleteTail() {
 }
 
 template <typename T> void linkedList<T>::deleteInBetweenNode(size_t index) {
-  node<T>* selectedNode{ this->operator[](index) };
+  node<T>* selectedNode{ getNodeFromIndex(index) };
   displaceInBewtweenNode(selectedNode);
   delete selectedNode;
   --size;
@@ -238,11 +255,6 @@ template <typename T> void linkedList<T>::clear() {
   for (size_t i{0}; i < size; ++i) {
     deleteHead();
   }
-}
-
-template <typename T> node<T>* linkedList<T>::iterate() {
-  iterator = (iterator == NULL) ? head : iterator->nextNode;
-  return iterator;
 }
 
 #endif
