@@ -50,14 +50,3 @@ void menu::print() {
 void menu::printExitMessage() {
   std::cout << "SEE YOU NEXT TIME!!";
 }
-
-void printMenu() {
-  std::cout << "----------------------------------------------\n";
-  std::cout << "                 TO-DO LIST\n";
-  std::cout << "----------------------------------------------\n";
-  std::cout << "1) CHECK TO-DO LIST\n";         // just printing
-  std::cout << "2) ADD / ELIMINATE TASKS\n";    // asking which one and where
-  std::cout << "3) MODIFY TASK\n";              // get by index + Edit and Overwrite 
-  std::cout << "4) CHANGE TASK POSITION\n";     // 
-  std::cout << "5) ERASE ALL DATA\n";           // delete list and savefile 
-}

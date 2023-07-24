@@ -22,48 +22,53 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.addByIndex(5, "Pratiquer l\'orthographie française");
 }
 
-void printx(int x) {
-  std::cout << x;
-}
-
-void phoenixWrightFunction() {
-  std::cout << "OBJECTION!!!!!\n";
-}
-
 int main() {
-  menuFunction phoenix { &phoenixWrightFunction, "objection!!!"};
-  menuFunction saaans { std::bind(&printx, 5), "print x"};
-  menuFunction functions[] { phoenix, saaans };
-  menu testmenu{"TO-DO LIST", 2, functions};
-  testmenu.run();
-  // linkedList<const char*> todoList;
-  // addTestingTasks(todoList);
-  // bool keepRunning{true};
-  // while (keepRunning) {
-  //   printMenu();
-  //   getAndDoUserOption(todoList, keepRunning);
-  //   pressAnyToContinue();
-  // }
+  linkedList<const char*>* todoList { new linkedList<const char*> };
+  addTestingTasks(*todoList);
+  menuFunction* functions { getTodoListFunctions(todoList) };
+  menu myMenu{"TO-DO LIST", 5, functions};
+  myMenu.run();
   return 0;
 }
 
-void getAndDoUserOption(linkedList<const char*>& todoList, bool& keepRunning) {
-  int option { getUserInput<int>() };
-  switch (option) {
-    case 1:
-      printTodoList(todoList);
-      break;
-    case 6:
-      keepRunning = false;
-      break;
-    default:
-      printBadInputError();
-      break;
+menuFunction* getTodoListFunctions(linkedList<const char*>* todoList) {
+  menuFunction print { std::bind(&printTodoList, todoList), "CHECK TO-DO LIST" };
+  menuFunction addOrDelete { std::bind(&addOrDeleteTasks, todoList), "ADD / ELIMINATE TASKS" };
+  menuFunction modify { std::bind(&modifyTasks, todoList), "MODIFY TASK" };
+  menuFunction relocate { std::bind(&relocateTasks, todoList), "RELOCATE TASK" };
+  menuFunction eraseAll { std::bind(&eraseAllTasks, todoList), "ERASE ALL DATA" };
+  menuFunction* functions { new menuFunction[5] { print, addOrDelete, modify, relocate, eraseAll } };
+  return functions;
+}
+
+void printTodoList(linkedList<const char*>* todoList) {
+  for (size_t i{1}; (*todoList).iterate() !=  NULL; ++i) {
+    std::cout << i << ") " << (*todoList).getIteratorValue() << '\n';
   }
 }
 
-void printTodoList(linkedList<const char*>& todoList) {
-  for (size_t i{1}; todoList.iterate() !=  NULL; ++i) {
-    std::cout << i << ") " << todoList.getIteratorValue() << '\n';
+void addOrDeleteTasks(linkedList<const char*>* todoList) {    // asking which one and where
+  for (size_t i{1}; (*todoList).iterate() !=  NULL; ++i) {
+    std::cout << i << ") " << (*todoList).getIteratorValue() << '\n';
   }
 }
+
+void modifyTasks(linkedList<const char*>* todoList) {         // get by index + Edit and Overwrite
+  for (size_t i{1}; (*todoList).iterate() !=  NULL; ++i) {
+    std::cout << i << ") " << (*todoList).getIteratorValue() << '\n';
+  }
+}
+
+void relocateTasks(linkedList<const char*>* todoList) {       // asking which one and where
+  for (size_t i{1}; (*todoList).iterate() !=  NULL; ++i) {
+    std::cout << i << ") " << (*todoList).getIteratorValue() << '\n';
+  }
+}
+
+void eraseAllTasks(linkedList<const char*>* todoList) {       // delete list and savefile 
+  for (size_t i{1}; (*todoList).iterate() !=  NULL; ++i) {
+    std::cout << i << ") " << (*todoList).getIteratorValue() << '\n';
+  }
+}
+
+// Last 4 'for's are just to temporaly deactivate -werrors 

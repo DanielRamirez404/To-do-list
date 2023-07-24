@@ -21,6 +21,4 @@ public:
   void print();
 };
 
-void printMenu();
-
 #endif
