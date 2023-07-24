@@ -22,20 +22,20 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.addByIndex(5, "Pratiquer l\'orthographie française");
 }
 
-void undertaleFunction() {
-  //some code
+void printx(int x) {
+  std::cout << x;
 }
 
 void phoenixWrightFunction() {
-  //some code
+  std::cout << "OBJECTION!!!!!\n";
 }
 
 int main() {
-  menuFunction print { &phoenixWrightFunction, "objection!!!"};
-  menuFunction saaans { &undertaleFunction, "do ya wanna \'ave a bad time"};
-  menuFunction functions[] { print, saaans };
+  menuFunction phoenix { &phoenixWrightFunction, "objection!!!"};
+  menuFunction saaans { std::bind(&printx, 5), "print x"};
+  menuFunction functions[] { phoenix, saaans };
   menu testmenu{"TO-DO LIST", 2, functions};
-  testmenu.print();
+  testmenu.run();
   // linkedList<const char*> todoList;
   // addTestingTasks(todoList);
   // bool keepRunning{true};
