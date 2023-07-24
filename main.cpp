@@ -3,6 +3,8 @@
 #include "userinput.h"
 #include "menu.h"
 #include <iostream>
+#include <string>
+#include <functional>
 
 void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.append("Watch Oshi no Ko");
@@ -20,15 +22,28 @@ void addTestingTasks(linkedList<const char*>& todoList) {
   todoList.addByIndex(5, "Pratiquer l\'orthographie française");
 }
 
+void undertaleFunction() {
+  //some code
+}
+
+void phoenixWrightFunction() {
+  //some code
+}
+
 int main() {
-  linkedList<const char*> todoList;
-  addTestingTasks(todoList);
-  bool keepRunning{true};
-  while (keepRunning) {
-    printMenu();
-    getAndDoUserOption(todoList, keepRunning);
-    pressAnyToContinue();
-  }
+  menuFunction print { &phoenixWrightFunction, "objection!!!"};
+  menuFunction saaans { &undertaleFunction, "do ya wanna \'ave a bad time"};
+  menuFunction functions[] { print, saaans };
+  menu testmenu{"TO-DO LIST", 2, functions};
+  testmenu.print();
+  // linkedList<const char*> todoList;
+  // addTestingTasks(todoList);
+  // bool keepRunning{true};
+  // while (keepRunning) {
+  //   printMenu();
+  //   getAndDoUserOption(todoList, keepRunning);
+  //   pressAnyToContinue();
+  // }
   return 0;
 }
 
