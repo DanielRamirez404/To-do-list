@@ -19,49 +19,47 @@ std::string getWordInSentence(std::string sentence, int wordNumber) {
       if (wordCounter == wordNumber) word += sentence[i];
     }
   }
-  assert(word != "");
   return word;
 }
 
-std::string getWordByCharLimits(std::string sentence, char lowerLimit, char upperLimit) {
+std::string getTextByCharLimits(std::string sentence, char lowerLimit, char upperLimit) {
   std::string word{""};
   if (lowerLimit != upperLimit) {
-    loopWordByDifferentCharLimits(word, sentence, lowerLimit, upperLimit);
+    loopTextByDifferentCharLimits(word, sentence, lowerLimit, upperLimit);
   } else {
-    loopWordBySameCharLimits(word, sentence, lowerLimit);
+    loopTextBySameCharLimits(word, sentence, lowerLimit);
   }
-  assert(word != "");
   return word;
 }
 
-void loopWordByDifferentCharLimits(std::string& word, std::string sentence, char lowerLimit, char upperLimit) {
+void loopTextByDifferentCharLimits(std::string& word, std::string sentence, char lowerLimit, char upperLimit) {
   bool isCharBetweenLimits{false};
   for (size_t i = 0; i < sentence.size(); i++) {
-    if (sentence[i] == lowerLimit) {
-      isCharBetweenLimits = true;
+    if (sentence[i] == upperLimit) {
+      isCharBetweenLimits = false;
+      break;
     }
     if (isCharBetweenLimits) {
       word += sentence[i];
     }
-    if (sentence[i] == upperLimit) {
-      isCharBetweenLimits = false;
-      break;
+    if (sentence[i] == lowerLimit) {
+      isCharBetweenLimits = true;
     }
   }
   assert(!isCharBetweenLimits);
 }
 
-void loopWordBySameCharLimits(std::string& word, std::string sentence, char delimiter) {
+void loopTextBySameCharLimits(std::string& word, std::string sentence, char delimiter) {
   int characterOcurrences{0};
   for (size_t i = 0; i < sentence.size(); i++) {
-    if (sentence[i] == delimiter) {
-      characterOcurrences++;
+    if (characterOcurrences == 2) {
+      break;
     }
     if (characterOcurrences == 1) {
       word += sentence[i];
     }
-    if (characterOcurrences == 2) {
-      break;
+    if (sentence[i] == delimiter) {
+      characterOcurrences++;
     }
   }
   assert(characterOcurrences == 2);

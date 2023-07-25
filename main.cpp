@@ -7,45 +7,26 @@
 #include <fstream>
 #include <functional>
 #include <string>
-#include <vector>
-
-
-void addTestingTasks(linkedList<const char*>* todoList) {
-  todoList->append("Watch Oshi no Ko");
-  todoList->append("Reread One Piece");
-  todoList->preppend("Study kanji");
-  todoList->preppend("(Keep) Play(ing) Stardew Valley");
-  todoList->preppend("Finish to-do list");
-  todoList->append("Make another website");
-  todoList->append("Work on secret project");
-  todoList->addByIndex(0, "Rework linkedLists");
-  todoList->addByIndex(1, "Change to-do list examples");
-  todoList->moveNode(5, 0);
-  todoList->deleteByIndex(7);
-  todoList->deleteByIndex(5);
-  todoList->addByIndex(5, "Pratiquer l\'orthographie française");
-}
 
 int main() {
   linkedList<const char*>* todoList { new linkedList<const char*> };
-  std::vector<std::string> tasksTextHolder{};
-  // addTestingTasks(todoList);
-  if (isThereLoadableData()) {
-    readSavedData(todoList, tasksTextHolder);
-  }
-  menuFunction* functions { getTodoListFunctions(todoList) };
-  menu myMenu{"TO-DO LIST", 5, functions};
+  std::string* readTasksHolder{};
+  if (isThereLoadableData()) readSavedData(todoList, readTasksHolder);
+  constexpr int numberOfFunctions{5};
+  menu myMenu{"TO-DO LIST", numberOfFunctions, getTodoListFunctions(todoList, numberOfFunctions)};
   myMenu.run();
+  saveTodoListData(todoList);
+  delete todoList;
   return 0;
 }
 
-menuFunction* getTodoListFunctions(linkedList<const char*>* todoList) {
+menuFunction* getTodoListFunctions(linkedList<const char*>* todoList, int numberOfFunctions) {
   menuFunction print { std::bind(&printTodoList, todoList), "CHECK TO-DO LIST" };
   menuFunction addOrDelete { std::bind(&addOrDeleteTasks, todoList), "ADD / ELIMINATE TASKS" };
   menuFunction modify { std::bind(&modifyTasks, todoList), "MODIFY TASK" };
   menuFunction relocate { std::bind(&relocateTasks, todoList), "RELOCATE TASK" };
   menuFunction eraseAll { std::bind(&eraseAllTasks, todoList), "ERASE ALL DATA" };
-  menuFunction* functions { new menuFunction[5] { print, addOrDelete, modify, relocate, eraseAll } };
+  menuFunction* functions { new menuFunction[numberOfFunctions] { print, addOrDelete, modify, relocate, eraseAll } };
   return functions;
 }
 
@@ -55,31 +36,31 @@ void printTodoList(linkedList<const char*>* todoList) {
   }
 }
 
-void addOrDeleteTasks(linkedList<const char*>* todoList) {    // asking which one and where
+void addOrDeleteTasks(linkedList<const char*>* todoList) {    // To do: asking which one and where
   for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
     std::cout << i << ") " << todoList->getIteratorValue() << '\n';
   }
 }
 
-void modifyTasks(linkedList<const char*>* todoList) {         // get by index + Edit and Overwrite
+void modifyTasks(linkedList<const char*>* todoList) {         // To do: get by index + Edit and Overwrite
   for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
     std::cout << i << ") " << todoList->getIteratorValue() << '\n';
   }
 }
 
-void relocateTasks(linkedList<const char*>* todoList) {       // asking which one and where
+void relocateTasks(linkedList<const char*>* todoList) {       // To do: asking which one and where
   for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
     std::cout << i << ") " << todoList->getIteratorValue() << '\n';
   }
 }
 
-void eraseAllTasks(linkedList<const char*>* todoList) {       // delete list and savefile 
+void eraseAllTasks(linkedList<const char*>* todoList) {       // To do: delete list and savefile 
   for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
     std::cout << i << ") " << todoList->getIteratorValue() << '\n';
   }
 }
 
-// Last 4 'for's are just to temporaly deactivate -werrors 
+// Last 5 'for's are just to temporaly deactivate -werrors 
 
 bool isThereLoadableData() {
   std::fstream textFile{"todolist.txt", std::ios::in};
@@ -89,36 +70,40 @@ bool isThereLoadableData() {
       while (std::getline(textFile, textLine)) {
       isThereLoadableData = (textLine == "[DATA AVAILABLE]");
       break;
-    } 
-  } else {
-    textFile.close();
-    textFile.open("todolist.txt", std::ios::out);
+    }
   }
   textFile.close();
   return isThereLoadableData;
 }
 
-void readSavedData(linkedList<const char*>* todoList, std::vector<std::string>& tasksTextHolder) {
+void readSavedData(linkedList<const char*>* todoList, std::string* readTasksHolder) {
   std::fstream textFile{"todolist.txt", std::ios::in};
   std::string textLine{};
   for (size_t i{0}; std::getline(textFile, textLine); ++i) {
     if (textLine[0] == '*') {
-      tasksTextHolder.push_back(getWordByCharLimits(textLine, '[', ']'));
-      todoList->append(tasksTextHolder[todoList->getSize()].c_str());
+      readTasksHolder[todoList->getSize()] = getTextByCharLimits(textLine, '[', ']');
+      todoList->append(readTasksHolder[todoList->getSize()].c_str());
+    } else if (getWordInSentence(textLine, 1) == "Size:") {
+      int readListSize{ std::stoi(getWordInSentence(textLine, 2)) };
+      readTasksHolder = new std::string[readListSize];
     }
   }
   textFile.close();
 }
 
 void saveTodoListData(linkedList<const char*>* todoList) {
-  std::fstream textFile{"todolist.txt", std::ios::in};
-  std::string textLine{};
-  for (size_t lineCounter{0}; std::getline(textFile, textLine); ++lineCounter) {
-    if (textLine[0] == '*') {
-
+  remove("todolist.txt");
+  std::fstream textFile{"todolist.txt", std::ios::out};
+  if (todoList->isEmpty()) {
+    textFile << "[NO DATA AVAILABLE]";
+  } else {
+    textFile << "[DATA AVAILABLE]";
+    textFile << "\nSize: " << todoList->getSize();
+    textFile << "\n<<< ---------------------------------------- >>>";
+    while (todoList->iterate() != NULL) {
+      textFile << "\n* [" << todoList->getIteratorValue() << ']';
     }
+    textFile << "\n<<< ---------------------------------------- >>>";
   }
-  for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
-    std::cout << i << ") " << todoList->getIteratorValue() << '\n';
-  }
+  textFile.close();
 }

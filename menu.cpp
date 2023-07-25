@@ -25,7 +25,6 @@ void menu::run() {
     functions[selectedOption - 1].function();
     pressAnyToContinue();
   }
-  printExitMessage();
 }
 
 bool menu::isUserQuitting(int selectedOption) {
@@ -45,8 +44,4 @@ void menu::print() {
     std::cout << i + 1 << ") " << functions[i].name << '\n'; 
   }
   std::cout << totalOptions + 1 << ") GO BACK\n";
-}
-
-void menu::printExitMessage() {
-  std::cout << "SEE YOU NEXT TIME!!";
 }
