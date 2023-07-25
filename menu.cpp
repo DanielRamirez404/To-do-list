@@ -13,7 +13,7 @@ menu::menu(const char* menuName, int totalFunctions, menuFunction* menuFunctions
 void menu::run() {
   while (true) {
     print();
-    int selectedOption = getUserInput<int>();
+    int selectedOption{ getUserInput<int>() };
     assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");
     if (isUserQuitting(selectedOption)) { 
       if (isQuittingConfirmed()) {
