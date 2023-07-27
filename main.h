@@ -4,15 +4,19 @@
 #include "menu.h"
 #include <string>
 
-menuFunction* getTodoListFunctions(linkedList<const char*>* todoList, int numberOfFunctions);
-void printTodoList(linkedList<const char*>* todoList);
-void addOrDeleteTasks(linkedList<const char*>* todoList);
-void modifyTasks(linkedList<const char*>* todoList);
-void relocateTasks(linkedList<const char*>* todoList);
-void eraseAllTasks(linkedList<const char*>* todoList);
+menuFunction* getTodoListFunctions(linkedList<std::string*>* todoList);
+void printTodoList(linkedList<std::string*>* todoList);
+void addOrDeleteTasks(linkedList<std::string*>* todoList);
+void addTasks(linkedList<std::string*>* todoList);
+void addTaskByIndex(linkedList<std::string*>* todoList, std::string* task);
+void eliminateTasks(linkedList<std::string*>* todoList);
+void eliminateTaskByIndex(linkedList<std::string*>* todoList);
+void modifyTasks(linkedList<std::string*>* todoList);
+void relocateTasks(linkedList<std::string*>* todoList);
+void eraseAllTasks(linkedList<std::string*>* todoList);
 bool isThereLoadableData();
-void readSavedData(linkedList<const char*>* todoList, std::string* readTasksHolder);
-void saveTodoListData(linkedList<const char*>* todoList);
+void readSavedData(linkedList<std::string*>* todoList);
+void saveTodoListData(linkedList<std::string*>* todoList);
 
 
 #endif

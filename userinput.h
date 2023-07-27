@@ -1,6 +1,7 @@
 #ifndef USER_INPUT
 #define USER_INPUT
 #include <iostream>
+#include <string>
 
 template <typename T> T getUserInput() {
   std::cout << "----------------------------------------------\n";
@@ -11,6 +12,7 @@ template <typename T> T getUserInput() {
   return userInput;
 }
 
+std::string getUserInputLine();
 bool ynInput();
 void printBadInputError();
 void pressAnyToContinue();

@@ -27,6 +27,16 @@ void menu::run() {
   }
 }
 
+void menu::runOnce() {
+  print();
+  int selectedOption{ getUserInput<int>() };
+  assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");
+  if (!isUserQuitting(selectedOption)) {
+    functions[selectedOption - 1].function();
+    }  
+  pressAnyToContinue();
+}
+
 bool menu::isUserQuitting(int selectedOption) {
   return (selectedOption == totalOptions + 1);
 }

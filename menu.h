@@ -17,6 +17,7 @@ private:
 public:
   menu(const char* menuName, int totalFunctions, menuFunction* menuFunctions);
   void run();
+  void runOnce();
   void print();
 };
 

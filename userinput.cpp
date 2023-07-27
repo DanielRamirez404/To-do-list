@@ -1,6 +1,16 @@
 #include "userinput.h"
 #include <iostream>
 #include <conio.h>
+#include <string>
+
+std::string getUserInputLine() {
+  std::cout << "----------------------------------------------\n";
+  std::cout << "INPUT LINE:\n";
+  std::string userInput{};
+  std::getline(std::cin >> std::ws, userInput);
+  std::cout << "----------------------------------------------\n";
+  return userInput;
+}
 
 bool ynInput() {
   bool choice{};
