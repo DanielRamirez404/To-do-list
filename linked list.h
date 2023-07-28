@@ -8,6 +8,8 @@ public:
   T value{};
   node* previousNode{};
   node* nextNode{};
+  node (const node&) = delete;
+  node& operator=(const node&) = delete; 
   node(T initializationValue) { value = initializationValue; };
 };
 

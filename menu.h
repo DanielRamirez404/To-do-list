@@ -1,24 +1,39 @@
 #ifndef MENU
 #define MENU
 #include <functional>
+#include <string>
 
 struct menuFunction {
   std::function<void()> function;
-  const char* name;
+  std::string name;
 };
 
 class menu {
-private:
-  const char* name{};
+protected:
+  std::string exitMessage{"GO BACK"};
+  std::string name{};
   int totalOptions{};
   menuFunction* functions{};
   bool isUserQuitting(int selectedOption);
   bool isQuittingConfirmed();
 public:
-  menu(const char* menuName, int totalFunctions, menuFunction* menuFunctions);
+  menu (const menu&) = delete;
+  menu& operator=(const menu&) = delete; 
+  menu(std::string menuName, int totalFunctions, menuFunction* menuFunctions);
+  ~menu();
   void run();
-  void runOnce();
   void print();
+};
+
+class mainMenu : public menu {
+public:
+  mainMenu(std::string menuName, int totalFunctions, menuFunction* menuFunctions) : menu (menuName, totalFunctions, menuFunctions) { menu::exitMessage = "EXIT"; };
+};
+
+class runOnceMenu : public menu {
+public:
+  void run();
+  using menu::menu;
 };
 
 #endif
