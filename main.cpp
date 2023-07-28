@@ -3,6 +3,7 @@
 #include "userinput.h"
 #include "userstring.h"
 #include "menu.h"
+
 #include <iostream>
 #include <fstream>
 #include <functional>
@@ -16,7 +17,8 @@ namespace NumberOfFunctions {
 
 int main() {
   linkedList<std::string>* todoList { new linkedList<std::string> };
-  if (isThereLoadableData()) readSavedData(todoList);
+  if (isThereLoadableData()) 
+    readSavedData(todoList);
   mainMenu todoListMenu{"TO-DO LIST", NumberOfFunctions::todoList, getTodoListFunctions(todoList)};
   todoListMenu.run();
   delete todoList;
@@ -37,13 +39,13 @@ void printTodoList(linkedList<std::string>* todoList) {
   if(todoList->isEmpty()) {
     std::cout << "OH-OH, SEEMS LIKE YOUR TO-DO LIST IS EMPTY!";
   } else {
-    for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
+    for (size_t i{1}; todoList->iterate() !=  nullptr; ++i) {
       std::cout << i << ") " << (todoList->getIteratorValue()) << '\n';
     }
   }
 }
 
-void addOrDeleteTasks(linkedList<std::string>* todoList) {    // To do: asking which one and where
+void addOrDeleteTasks(linkedList<std::string>* todoList) {
   menuFunction add { std::bind(&addTasks, todoList), "ADD TASK"};
   menuFunction eliminate { std::bind(&eliminateTasks, todoList), "DELETE TASK"};
   menuFunction* addOrDeletefunctions { new menuFunction[NumberOfFunctions::addOrDelete] {add, eliminate}}; 
@@ -87,25 +89,22 @@ void eliminateTaskByIndex(linkedList<std::string>* todoList) {
   todoList->deleteByIndex(index);
 }
 
-void modifyTasks(linkedList<std::string>* todoList) {         // To do: get by index + Edit and Overwrite
-  for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
-    std::cout << i << ") " << todoList->getIteratorValue() << '\n';
-  }
+void modifyTasks(linkedList<std::string>* todoList) {         
+  // To do: get by index + Edit and Overwrite
+  printTodoList(todoList);
 }
 
-void relocateTasks(linkedList<std::string>* todoList) {       // To do: asking which one and where
-  for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
-    std::cout << i << ") " << todoList->getIteratorValue() << '\n';
-  }
+void relocateTasks(linkedList<std::string>* todoList) {       
+  // To do: asking which one and where
+  printTodoList(todoList);
 }
 
-void eraseAllTasks(linkedList<std::string>* todoList) {       // To do: delete list and savefile 
-  for (size_t i{1}; todoList->iterate() !=  NULL; ++i) {
-    std::cout << i << ") " << todoList->getIteratorValue() << '\n';
-  }
+void eraseAllTasks(linkedList<std::string>* todoList) {       
+  // To do: delete list and savefile 
+  printTodoList(todoList);
 }
 
-// Last 3 'for's are just to temporaly deactivate -werrors 
+// Last 3 'printTodoList's are just to temporaly deactivate -werrors 
 
 bool isThereLoadableData() {
   std::fstream textFile{"todolist.txt", std::ios::in};
@@ -140,7 +139,7 @@ void saveTodoListData(linkedList<std::string>* todoList) {
   } else {
     textFile << "[DATA AVAILABLE]";
     textFile << "\n<<< ---------------------------------------- >>>";
-    while (todoList->iterate() != NULL) {
+    while (todoList->iterate() != nullptr) {
       textFile << "\n* [" << (todoList->getIteratorValue()) << ']';
     }
     textFile << "\n<<< ---------------------------------------- >>>";

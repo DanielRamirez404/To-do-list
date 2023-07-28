@@ -9,16 +9,16 @@ public:
   node* previousNode{};
   node* nextNode{};
   node (const node&) = delete;
-  node& operator=(const node&) = delete; 
+  node& operator=(const node&) = delete;
   node(T initializationValue) { value = initializationValue; };
 };
 
 template <typename T> class linkedList {
 private:
   size_t size{0};
-  node<T>* head{NULL};
-  node<T>* tail{NULL};
-  node<T>* iterator{NULL};
+  node<T>* head{nullptr};
+  node<T>* tail{nullptr};
+  node<T>* iterator{nullptr};
   void addFirstValue(T value);
   void addInBetween(size_t index, T value);
   void placeNodeOnHead(node<T>* nodeToPlace);
@@ -53,20 +53,20 @@ public:
   void deleteTail();
   void deleteByIndex(size_t index);
   void clear(); 
-  void resetIterator() { iterator = NULL; };
+  void resetIterator() { iterator = nullptr; };
   bool isEmpty() { return (size == 0); };
   ~linkedList() { clear(); };
 };
 
 template <typename T> node<T>* linkedList<T>::iterate() {
-  iterator = (iterator == NULL) ? head : iterator->nextNode;
+  iterator = (iterator == nullptr) ? head : iterator->nextNode;
   return iterator;
 }
 
 template <typename T> node<T>* linkedList<T>::getNodeFromIndex(size_t index) {
   assert((index < size) && "Index value isn\'t valid");
   node<T>* requestedNode{};
-  for (size_t i{0}; iterate() != NULL; ++i) {
+  for (size_t i{0}; iterate() != nullptr; ++i) {
     if (i == index) {
       requestedNode = iterator;
       break;
@@ -111,7 +111,7 @@ template <typename T> void linkedList<T>::addByIndex(size_t index, T value) {
 }
 
 template <typename T> void linkedList<T>::addInBetween(size_t index, T value) {
-  for (size_t i{0}; iterate() != NULL; ++i) {
+  for (size_t i{0}; iterate() != nullptr; ++i) {
     if (i == index - 1) {
       placeNodeInBetween(new node<T>(value), iterator);
       break;
@@ -151,36 +151,36 @@ template <typename T> void linkedList<T>::displaceNode(node<T>* nodeToDisplace, 
 template <typename T> void linkedList<T>::displaceHead() {
   node<T>* oldHead{head};
   head = oldHead->nextNode;
-  head->previousNode = NULL;
-  oldHead->nextNode = NULL;
+  head->previousNode = nullptr;
+  oldHead->nextNode = nullptr;
 }
 
 template <typename T> void linkedList<T>::displaceTail() {
   node<T>* oldTail{tail};
   tail = oldTail->previousNode;
-  tail->nextNode = NULL;
-  oldTail->previousNode = NULL;
+  tail->nextNode = nullptr;
+  oldTail->previousNode = nullptr;
 }
 
 template <typename T> void linkedList<T>::displaceHead(node<T>* oldHead) {
   assert((oldHead == head) && "Passed pointer must point to the head\'s direction");
   head = oldHead->nextNode;
-  head->previousNode = NULL;
-  oldHead->nextNode = NULL;
+  head->previousNode = nullptr;
+  oldHead->nextNode = nullptr;
 }
 
 template <typename T> void linkedList<T>::displaceTail(node<T>* oldTail) {
   assert((oldTail == tail) && "Passed pointer must point to the tail's direction");
   tail = oldTail->previousNode;
-  tail->nextNode = NULL;
-  oldTail->previousNode = NULL;
+  tail->nextNode = nullptr;
+  oldTail->previousNode = nullptr;
 }
 
 template <typename T> void linkedList<T>::displaceInBewtweenNode(node<T>* nodeToDisplace) {
   nodeToDisplace->previousNode->nextNode = nodeToDisplace->nextNode;
   nodeToDisplace->nextNode->previousNode = nodeToDisplace->previousNode;
-  nodeToDisplace->nextNode = NULL;
-  nodeToDisplace->previousNode = NULL;
+  nodeToDisplace->nextNode = nullptr;
+  nodeToDisplace->previousNode = nullptr;
 }
 
 template <typename T> void linkedList<T>::moveNode(size_t oldIndex, size_t newIndex) {
@@ -215,7 +215,7 @@ template <typename T> void linkedList<T>::moveNodeInBewteen(size_t oldIndex, siz
   assert((oldIndex != newIndex) && "Both index values shouldn\'t be equal");
   node<T>* selectedNode{ getNodeFromIndex(oldIndex) };
   displaceNode(selectedNode, oldIndex);
-  for (size_t i{0}; iterate() != NULL; ++i) {
+  for (size_t i{0}; iterate() != nullptr; ++i) {
     if (i == newIndex - 1) {
       placeNodeInBetween(selectedNode, iterator);
       break;

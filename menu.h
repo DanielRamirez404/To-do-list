@@ -11,23 +11,24 @@ struct menuFunction {
 class menu {
 protected:
   std::string exitMessage{"GO BACK"};
-  std::string name{};
+  std::string title{};
   int totalOptions{};
   menuFunction* functions{};
-  bool isUserQuitting(int selectedOption);
+  bool isUserQuitting(int selectedOption) { return (selectedOption == totalOptions + 1); };
   bool isQuittingConfirmed();
+  void printTitle();
 public:
   menu (const menu&) = delete;
   menu& operator=(const menu&) = delete; 
-  menu(std::string menuName, int totalFunctions, menuFunction* menuFunctions);
-  ~menu();
+  menu(std::string menuTitle, int totalFunctions, menuFunction* menuFunctions);
+  ~menu() { delete[] functions; };
   void run();
   void print();
 };
 
 class mainMenu : public menu {
 public:
-  mainMenu(std::string menuName, int totalFunctions, menuFunction* menuFunctions) : menu (menuName, totalFunctions, menuFunctions) { menu::exitMessage = "EXIT"; };
+  mainMenu(std::string menuTitle, int totalFunctions, menuFunction* menuFunctions) : menu (menuTitle, totalFunctions, menuFunctions) { menu::exitMessage = "EXIT"; };
 };
 
 class runOnceMenu : public menu {
