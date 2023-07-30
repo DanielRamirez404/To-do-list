@@ -1,20 +1,23 @@
 #include "menu.h"
 #include "userinput.h"
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <functional>
 
-menu::menu(std::string menuTitle, int totalFunctions, menuFunction* menuFunctions) {
+#include <cassert>
+#include <cstddef>
+#include <iostream>
+#include <functional>
+#include <string>
+#include <vector>
+
+menu::menu(std::string menuTitle, std::vector<menuFunction> menuFunctions) {
   title = menuTitle;
-  totalOptions = totalFunctions;
   functions = menuFunctions;
+  totalOptions = menuFunctions.size();
 }
 
 void menu::run() {
   while (true) {
     print();
-    int selectedOption{ getUserInput<int>() };
+    size_t selectedOption{ getUserInput<size_t>() };
     assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");
     if (isUserQuitting(selectedOption)) { 
       if (isQuittingConfirmed()) {
@@ -23,7 +26,7 @@ void menu::run() {
         continue;
       }
     }
-    functions[selectedOption - 1].function();
+    functions[static_cast<size_t>(selectedOption - 1)].function();
     pressAnyToContinue();
   }
 }
@@ -35,7 +38,7 @@ bool menu::isQuittingConfirmed() {
 
 void menu::print() {
   printTitle();
-  for (int i{0}; i < totalOptions; ++i) {
+  for (size_t i{0}; i < totalOptions; ++i) {
     std::cout << i + 1 << ") " << functions[i].name << '\n'; 
   }
   std::cout << totalOptions + 1 << ") " << exitMessage << '\n';
@@ -59,13 +62,13 @@ void menu::printTitle() {
 
 void runOnceMenu::run() {
   print();
-  int selectedOption{ getUserInput<int>() };
+  size_t selectedOption{ getUserInput<size_t>() };
   assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");
   if (isUserQuitting(selectedOption)) {
     if (!isQuittingConfirmed()) {
       run();
     }
   } else {
-    functions[selectedOption - 1].function();
+    functions[static_cast<size_t>(selectedOption - 1)].function();
   }
 }
