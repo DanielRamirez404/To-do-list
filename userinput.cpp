@@ -12,6 +12,16 @@ std::string getUserInputLine() {
   return userInput;
 }
 
+std::string makeUserModifyLine(std::string textToEdit) {
+  std::cout << "----------------------------------------------\n";
+  std::cout << "INPUT LINE:\n";
+  std::cout << textToEdit;
+  std::string userInput{};
+  std::getline(std::cin >> std::ws, userInput);
+  std::cout << "----------------------------------------------\n";
+  return userInput;
+}
+
 bool ynInput() {
   bool choice{};
   char userInput{ getUserInput<char>() };

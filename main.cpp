@@ -21,10 +21,10 @@ int main() {
 std::vector<menuFunction> getTodoListFunctions(linkedList<std::string>& todoList) {
   std::vector<menuFunction> functions{};
   functions.push_back( { std::bind(&printTodoList, &todoList), "CHECK TO-DO LIST" } );
-  functions.push_back( { std::bind(&addOrDeleteTasks, &todoList), "ADD / DELETE TASK" } );
-  functions.push_back( { std::bind(&modifyTasks, &todoList), "MODIFY TASK" } );
-  functions.push_back( { std::bind(&relocateTasks, &todoList), "RELOCATE TASK" } );
-  functions.push_back( { std::bind(&eraseAllTasks, &todoList), "ERASE ALL DATA" } );
+  functions.push_back( { std::bind(&addOrDeleteTask, &todoList), "ADD / DELETE TASK" } );
+  functions.push_back( { std::bind(&overwriteTask, &todoList), "MODIFY TASK" } );
+  functions.push_back( { std::bind(&relocateTask, &todoList), "RELOCATE TASK" } );
+  functions.push_back( { std::bind(&eraseAllTask, &todoList), "ERASE ALL DATA" } );
   return functions;
 }
 
@@ -38,17 +38,17 @@ void printTodoList(linkedList<std::string>* todoList) {
   }
 }
 
-void addOrDeleteTasks(linkedList<std::string>* todoList) {
+void addOrDeleteTask(linkedList<std::string>* todoList) {
   std::vector<menuFunction> addOrDeletefunctions{};
-  addOrDeletefunctions.push_back( { std::bind(&addTasks, todoList), "ADD TASK" } );
-  addOrDeletefunctions.push_back( { std::bind(&eliminateTasks, todoList), "DELETE TASK" } );
+  addOrDeletefunctions.push_back( { std::bind(&addTask, todoList), "ADD TASK" } );
+  addOrDeletefunctions.push_back( { std::bind(&eliminateTask, todoList), "DELETE TASK" } );
   menu addOrDeleteMenu {"ADD / DELETE", addOrDeletefunctions};
   addOrDeleteMenu.run();
   saveTodoListData(*todoList);
   std::cout << "YOUR DATA HAS BEEN SUCEESSFULLY SAVED\n";
 }
 
-void addTasks(linkedList<std::string>* todoList) {
+void addTask(linkedList<std::string>* todoList) {
   std::cout << "PLEASE, INPUT THE TASK YOU WANT TO ADD: \n";
   std::string task { getUserInputLine() };
   std::vector<menuFunction> addFunctions{};
@@ -65,7 +65,7 @@ void addTaskByIndex(linkedList<std::string>* todoList, std::string task) {
   todoList->addByIndex(index, task);
 }
 
-void eliminateTasks(linkedList<std::string>* todoList) {
+void eliminateTask(linkedList<std::string>* todoList) {
   std::vector<menuFunction> deleteFunctions{};
   deleteFunctions.push_back( { std::bind(&linkedList<std::string>::deleteHead, todoList), "DELETE FIRST" } );
   deleteFunctions.push_back( { std::bind(&linkedList<std::string>::deleteTail, todoList), "DELETE LAST"} );
@@ -80,17 +80,25 @@ void eliminateTaskByIndex(linkedList<std::string>* todoList) {
   todoList->deleteByIndex(index);
 }
 
-void modifyTasks(linkedList<std::string>* todoList) {         
-  // To do: get by index + Edit and Overwrite
-  printTodoList(todoList);
+void overwriteTask(linkedList<std::string>* todoList) {         
+  std::cout << "PLEASE, ENTER THE INDEX OF THE TASK YOU WANT TO MODIFY\n";
+  size_t index{ getUserInput<size_t>() - 1 };
+  std::cout << "DO YOU WANT TO OVERWRITE THIS TASK?: (y/n)\n";
+  std::cout << "TASK: " << (*todoList)[index] << '\n';
+  if (ynInput()) {
+      std::cout << "THEN, ENTER YOUR WISHED TEXT\n";
+      std::string task { getUserInputLine() };
+      todoList->overwriteValue(index, task);
+      std::cout << "YOUR TASK WAS SUCCESSFULLY OVERWRITTEN\n";
+  }
 }
 
-void relocateTasks(linkedList<std::string>* todoList) {       
+void relocateTask(linkedList<std::string>* todoList) {       
   // To do: asking which one and where
   printTodoList(todoList);
 }
 
-void eraseAllTasks(linkedList<std::string>* todoList) {       
+void eraseAllTask(linkedList<std::string>* todoList) {       
   // To do: delete list and savefile 
   printTodoList(todoList);
 }
