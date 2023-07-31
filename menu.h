@@ -33,9 +33,12 @@ public:
 };
 
 class runOnceMenu : public menu {
+private:
+  bool didUserQuit{false};
 public:
-  void run();
   using menu::menu;
+  void run();
+  bool didUserExit() { return didUserQuit; } ;
 };
 
 #endif

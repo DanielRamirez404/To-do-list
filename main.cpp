@@ -17,7 +17,7 @@ int main() {
   todoListMenu.run();
   saveTodoListData(todoList);
   std::cout << "YOUR DATA HAS BEEN SUCEESSFULLY SAVED\n";
-  std::cout << "SEE YOU NEXT TIME!\n";
+  std::cout << "SEE YOU NEXT TIME!\n\n";
   return 0;
 }
 
@@ -58,6 +58,9 @@ void addTask(linkedList<std::string>* todoList) {
   addFunctions.push_back( { std::bind(&addTaskByIndex, todoList, task), "ADD BY INDEX" } );
   runOnceMenu add{ "ADD", addFunctions};
   add.run();
+  if (!add.didUserExit()) {
+    std::cout << "YOUR TASK WAS SUCCESSFULLY ADDED\n";
+  }
 }
 
 void addTaskByIndex(linkedList<std::string>* todoList, std::string& task) {
@@ -73,6 +76,9 @@ void eliminateTask(linkedList<std::string>* todoList) {
   deleteFunctions.push_back( { std::bind(&eliminateTaskByIndex, todoList), "DELETE BY INDEX" } );
   runOnceMenu eliminate{ "DELETE", deleteFunctions};
   eliminate.run();
+  if (!eliminate.didUserExit()) {
+    std::cout << "YOUR TASK WAS SUCCESSFULLY DELETED\n";
+  }
 }
 
 void eliminateTaskByIndex(linkedList<std::string>* todoList) {
@@ -108,6 +114,9 @@ void moveTask(linkedList<std::string>* todoList) {  // To do: asking which one a
     moveFunctions.push_back( { std::bind(&moveTaskToIndex, todoList, oldIndex), "MOVE TO INDEX" } );
     runOnceMenu move{"MOVE", moveFunctions};
     move.run();
+      if (!move.didUserExit()) {
+      std::cout << "YOUR TASK WAS SUCCESSFULLY MOVED\n";
+    }
   }
 }
 

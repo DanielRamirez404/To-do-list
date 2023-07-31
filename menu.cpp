@@ -66,7 +66,9 @@ void runOnceMenu::run() {
   size_t selectedOption{ getUserInput<size_t>() };
   assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");
   if (isUserQuitting(selectedOption)) {
-    if (!isQuittingConfirmed()) {
+    if (isQuittingConfirmed()) {
+      didUserQuit = true;
+    } else {
       run();
     }
   } else {
