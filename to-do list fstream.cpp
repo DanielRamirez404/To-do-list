@@ -36,12 +36,20 @@ void saveTodoListData(linkedList<std::string>& todoList) {
   if (todoList.isEmpty()) {
     textFile << "[NO DATA AVAILABLE]";
   } else {
-    textFile << "[DATA AVAILABLE]";
-    textFile << "\n<<< ---------------------------------------- >>>";
+    textFile << "[DATA AVAILABLE]\n";
+    textFile << "<<< ---------------------------------------- >>>\n";
     while (todoList.iterate() != nullptr) {
-      textFile << "\n* [" << (todoList.getIteratorValue()) << ']';
+      textFile << "* [" << todoList.getIteratorValue() << "]\n";
     }
-    textFile << "\n<<< ---------------------------------------- >>>";
+    textFile << "<<< ---------------------------------------- >>>";
   }
   textFile.close();
+}
+
+void eraseTodoListData() {
+  remove("todolist.txt");
+  std::fstream temp{"temp.txt", std::ios::out};
+  temp << "[NO DATA AVAILABLE]";
+  temp.close();
+  rename("temp.txt", "todolist.txt");
 }

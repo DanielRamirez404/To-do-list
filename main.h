@@ -15,7 +15,7 @@ void eliminateTaskByIndex(linkedList<std::string>* todoList);
 void overwriteTask(linkedList<std::string>* todoList);
 void moveTask(linkedList<std::string>* todoList);
 void moveTaskToIndex(linkedList<std::string>* todoList, size_t& oldIndex);
-void eraseAllTask(linkedList<std::string>* todoList);
+void eraseAllTasks(linkedList<std::string>* todoList);
 
 
 #endif

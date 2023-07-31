@@ -6,5 +6,6 @@
 bool isThereLoadableData();
 void readSavedData(linkedList<std::string>& todoList);
 void saveTodoListData(linkedList<std::string>& todoList);
+void eraseTodoListData();
 
 #endif

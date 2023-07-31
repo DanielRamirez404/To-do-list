@@ -27,7 +27,7 @@ std::vector<menuFunction> getTodoListFunctions(linkedList<std::string>& todoList
   functions.push_back( { std::bind(&addOrDeleteTask, &todoList), "ADD / DELETE TASK" } );
   functions.push_back( { std::bind(&overwriteTask, &todoList), "OVERWRITE TASK" } );
   functions.push_back( { std::bind(&moveTask, &todoList), "RELOCATE TASK" } );
-  functions.push_back( { std::bind(&eraseAllTask, &todoList), "ERASE ALL DATA" } );
+  functions.push_back( { std::bind(&eraseAllTasks, &todoList), "ERASE ALL DATA" } );
   return functions;
 }
 
@@ -117,9 +117,12 @@ void moveTaskToIndex(linkedList<std::string>* todoList, size_t& oldIndex) {
   todoList->moveNode(oldIndex, newIndex);
 }
 
-void eraseAllTask(linkedList<std::string>* todoList) {       
-  // To do: delete list and savefile
-  printTodoList(todoList);
+void eraseAllTasks(linkedList<std::string>* todoList) {
+  std::cout << "ARE YOU SURE YOU WANT TO DELETE ALL DATA\n";
+  std::cout << "KNOWING THAT THIS CANNOT BE UNDONE? (y/n)\n";
+  if (ynInput()) {
+      todoList->clear();
+      eraseTodoListData();
+      std::cout << "YOUR DATA HAS BEEN SUCCESSFULLY ERASED\n";
+  }
 }
-
-// Last 'printTodoList' is just to temporaly deactivate -werrors
