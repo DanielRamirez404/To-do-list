@@ -15,6 +15,9 @@ int main() {
   std::vector<menuFunction> functions{ getTodoListFunctions(todoList) };
   mainMenu todoListMenu{ "TO-DO LIST", functions };
   todoListMenu.run();
+  saveTodoListData(todoList);
+  std::cout << "YOUR DATA HAS BEEN SUCEESSFULLY SAVED\n";
+  std::cout << "SEE YOU NEXT TIME!\n";
   return 0;
 }
 
@@ -22,8 +25,8 @@ std::vector<menuFunction> getTodoListFunctions(linkedList<std::string>& todoList
   std::vector<menuFunction> functions{};
   functions.push_back( { std::bind(&printTodoList, &todoList), "CHECK TO-DO LIST" } );
   functions.push_back( { std::bind(&addOrDeleteTask, &todoList), "ADD / DELETE TASK" } );
-  functions.push_back( { std::bind(&overwriteTask, &todoList), "MODIFY TASK" } );
-  functions.push_back( { std::bind(&relocateTask, &todoList), "RELOCATE TASK" } );
+  functions.push_back( { std::bind(&overwriteTask, &todoList), "OVERWRITE TASK" } );
+  functions.push_back( { std::bind(&moveTask, &todoList), "RELOCATE TASK" } );
   functions.push_back( { std::bind(&eraseAllTask, &todoList), "ERASE ALL DATA" } );
   return functions;
 }
@@ -44,12 +47,10 @@ void addOrDeleteTask(linkedList<std::string>* todoList) {
   addOrDeletefunctions.push_back( { std::bind(&eliminateTask, todoList), "DELETE TASK" } );
   menu addOrDeleteMenu {"ADD / DELETE", addOrDeletefunctions};
   addOrDeleteMenu.run();
-  saveTodoListData(*todoList);
-  std::cout << "YOUR DATA HAS BEEN SUCEESSFULLY SAVED\n";
 }
 
 void addTask(linkedList<std::string>* todoList) {
-  std::cout << "PLEASE, INPUT THE TASK YOU WANT TO ADD: \n";
+  std::cout << "PLEASE, INPUT THE TASK YOU WANT TO ADD:\n";
   std::string task { getUserInputLine() };
   std::vector<menuFunction> addFunctions{};
   addFunctions.push_back( { std::bind(&linkedList<std::string>::preppend, todoList, task), "ADD FIRST" } );
@@ -59,7 +60,7 @@ void addTask(linkedList<std::string>* todoList) {
   add.run();
 }
 
-void addTaskByIndex(linkedList<std::string>* todoList, std::string task) {
+void addTaskByIndex(linkedList<std::string>* todoList, std::string& task) {
   std::cout << "PLEASE, ENTER THE INDEX YOU WANT TO ADD THE TASK TO\n";
   size_t index{ getUserInput<size_t>() - 1 };
   todoList->addByIndex(index, task);
@@ -81,7 +82,7 @@ void eliminateTaskByIndex(linkedList<std::string>* todoList) {
 }
 
 void overwriteTask(linkedList<std::string>* todoList) {         
-  std::cout << "PLEASE, ENTER THE INDEX OF THE TASK YOU WANT TO MODIFY\n";
+  std::cout << "PLEASE, ENTER THE INDEX OF YOUR DESIRED TASK\n";
   size_t index{ getUserInput<size_t>() - 1 };
   std::cout << "DO YOU WANT TO OVERWRITE THIS TASK?: (y/n)\n";
   std::cout << "TASK: " << (*todoList)[index] << '\n';
@@ -93,14 +94,32 @@ void overwriteTask(linkedList<std::string>* todoList) {
   }
 }
 
-void relocateTask(linkedList<std::string>* todoList) {       
-  // To do: asking which one and where
-  printTodoList(todoList);
+void moveTask(linkedList<std::string>* todoList) {  // To do: asking which one and where
+  std::cout << "PLEASE, ENTER THE INDEX OF YOUR DESIRED TASK\n";
+  size_t oldIndex{ getUserInput<size_t>() - 1 };
+  std::cout << "DO YOU WANT TO MOVE THIS TASK?: (y/n)\n";
+  std::cout << "TASK: " << (*todoList)[oldIndex] << '\n';
+  if (ynInput()) {
+    std::cout << "THEN, ENTER YOUR PREFERED OPTION\n";
+    std::cout << "TO MOVE THE TASK TO\n";
+    std::vector<menuFunction> moveFunctions{};
+    moveFunctions.push_back( { std::bind(&linkedList<std::string>::moveNodeToHead, todoList, oldIndex), "MOVE TO FIRST" } );
+    moveFunctions.push_back( { std::bind(&linkedList<std::string>::moveNodeToTail, todoList, oldIndex), "MOVE TO LAST" } );
+    moveFunctions.push_back( { std::bind(&moveTaskToIndex, todoList, oldIndex), "MOVE TO INDEX" } );
+    runOnceMenu move{"MOVE", moveFunctions};
+    move.run();
+  }
+}
+
+void moveTaskToIndex(linkedList<std::string>* todoList, size_t& oldIndex) {
+  std::cout << "ENTER THE INDEX YOU WANT TO MOVE THE TASK TO\n";
+  size_t newIndex{ getUserInput<size_t>() - 1 };
+  todoList->moveNode(oldIndex, newIndex);
 }
 
 void eraseAllTask(linkedList<std::string>* todoList) {       
-  // To do: delete list and savefile 
+  // To do: delete list and savefile
   printTodoList(todoList);
 }
 
-// Last 3 'printTodoList's are just to temporaly deactivate -werrors
+// Last 'printTodoList' is just to temporaly deactivate -werrors

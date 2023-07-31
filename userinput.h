@@ -16,5 +16,6 @@ std::string getUserInputLine();
 bool ynInput();
 void printBadInputError();
 void pressAnyToContinue();
+void clearConsole();
 
 #endif

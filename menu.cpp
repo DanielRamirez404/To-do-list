@@ -16,6 +16,7 @@ menu::menu(std::string menuTitle, std::vector<menuFunction> menuFunctions) {
 
 void menu::run() {
   while (true) {
+    clearConsole();
     print();
     size_t selectedOption{ getUserInput<size_t>() };
     assert((selectedOption > 0) && (selectedOption <= totalOptions + 1) && "Nonvalid option");

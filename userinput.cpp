@@ -12,16 +12,6 @@ std::string getUserInputLine() {
   return userInput;
 }
 
-std::string makeUserModifyLine(std::string textToEdit) {
-  std::cout << "----------------------------------------------\n";
-  std::cout << "INPUT LINE:\n";
-  std::cout << textToEdit;
-  std::string userInput{};
-  std::getline(std::cin >> std::ws, userInput);
-  std::cout << "----------------------------------------------\n";
-  return userInput;
-}
-
 bool ynInput() {
   bool choice{};
   char userInput{ getUserInput<char>() };
@@ -52,4 +42,8 @@ void pressAnyToContinue() {
   std::cout << "       NOW, PRESS ANY KEY TO CONTINUE\n";
   std::cout << "----------------------------------------------\n";
   getch();
+}
+
+void clearConsole() {
+  std::cout << std::string( 100, '\n' );
 }
