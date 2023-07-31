@@ -180,7 +180,6 @@ template <typename T> void linkedList<T>::displaceHead(node<T>* oldHead) {
   if (size == 1) {
     displaceLastNode();
   } else {
-    node<T>* oldHead{head};
     head = oldHead->nextNode;
     head->previousNode = nullptr;
     oldHead->nextNode = nullptr;
@@ -192,7 +191,6 @@ template <typename T> void linkedList<T>::displaceTail(node<T>* oldTail) {
   if (size == 1) {
     displaceLastNode();
   } else {
-    node<T>* oldTail{tail};
     tail = oldTail->previousNode;
     tail->nextNode = nullptr;
     oldTail->previousNode = nullptr;

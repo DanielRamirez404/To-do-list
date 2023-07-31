@@ -1,5 +1,5 @@
-#ifndef MAIN
-#define MAIN
+#ifndef TODO_LIST
+#define TODO_LIST
 #include "linked list.h"
 #include "menu.h"
 #include <string>
@@ -16,6 +16,5 @@ void overwriteTask(linkedList<std::string>* todoList);
 void moveTask(linkedList<std::string>* todoList);
 void moveTaskToIndex(linkedList<std::string>* todoList, size_t& oldIndex);
 void eraseAllTasks(linkedList<std::string>* todoList);
-
 
 #endif
